@@ -25,10 +25,10 @@ public class Soldier : MonoBehaviour
             if(transform.position.x < PlayerContoller.instance.transform.position.x)
             {
                 rb.velocity = new Vector2(speed, 0);
-
             } 
             else
             {
+                rb.transform.localScale = new Vector3(-1, 1, 1);
                 rb.velocity = new Vector2(-speed, 0);
 
             }

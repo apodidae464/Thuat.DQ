@@ -155,5 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soldier: {fileID: 6298835331832059223, guid: 1c806e1c3d34e224db809b9a94baa658, type: 3}
+  anim: {fileID: 3898084374682312224}
+  root: {fileID: 2599731614932350135, guid: e5b8d554e071e4e448e74323241842e0, type: 3}
   moveSpeed: 1
   goToLeft: 0

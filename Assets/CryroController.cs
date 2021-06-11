@@ -9,12 +9,16 @@ public class CryroController : MonoBehaviour
     Collider2D col;
 
     public GameObject soldier;
+    public Animator anim;
+    public GameObject root;
 
     public float moveSpeed;
     public bool goToLeft;
     private float solderDelay = 500;
     private int numOfSolider = 0;
+    
 
+    private bool isDestroy = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,18 +36,30 @@ public class CryroController : MonoBehaviour
         }
         else
         {
+            rb.transform.localScale = new Vector3(-1, 1, 1);
             rb.velocity = new Vector2(-moveSpeed, 0);
         }
 
         solderDelay--;
-        if (solderDelay < 0 && numOfSolider < 3)
+        if (!isDestroy && solderDelay < 0 && numOfSolider < 3)
         {
-            Instantiate(soldier, transform.position, Quaternion.identity);
+            if (transform.position.x > root.transform.position.x)
+            {
+                soldier.transform.localScale = new Vector3(-1, 1, 1);
+                Instantiate(soldier, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                soldier.transform.localScale = new Vector3(1, 1, 1);
+                Instantiate(soldier, transform.position, Quaternion.identity);
+            }
             solderDelay = 500;
             numOfSolider++;
         }
     }
 
+
+    
     public void SpawnPos()
     {
         int r = Random.Range(2, 5);
@@ -79,7 +95,15 @@ public class CryroController : MonoBehaviour
     {
         if (collision.tag == "Firer")
         {
-            Destroy(gameObject);
+            anim.SetBool("destroyed", true);
+            isDestroy = true;
+           
         }
+    }
+
+    public void onGryroDestroyed()
+    {
+        Destroy(gameObject);
+        
     }
 }
