@@ -10,6 +10,7 @@ public class PlayerContoller : MonoBehaviour
     public float speed;
     public static PlayerContoller instance;
 
+    Vector3 mousePos;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,10 +32,15 @@ public class PlayerContoller : MonoBehaviour
         {
             gun.transform.Rotate(-Vector3.forward * speed * Time.deltaTime);
         }
+
+        
+
         if (Input.GetButtonUp("Fire1"))
         {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            gun.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+           
             Instantiate(firer, ciu.transform.position, ciu.transform.rotation);
-            
         }    
     }
 
@@ -42,7 +48,7 @@ public class PlayerContoller : MonoBehaviour
     {
         if(collision.tag == "Soldier")
         {
-            Destroy(gameObject);
+           // Destroy(gameObject);
         }
     }
 }
