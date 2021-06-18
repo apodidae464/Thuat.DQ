@@ -12,6 +12,8 @@ TagManager:
   - something
   - Soldier
   - border
+  - horizon
+  - catdead
   layers:
   - Default
   - TransparentFX

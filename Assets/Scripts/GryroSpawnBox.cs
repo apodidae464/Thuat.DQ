@@ -10,13 +10,15 @@ public class GryroSpawnBox : MonoBehaviour
     public int numOfGryPerFrame;
     public List<GameObject> gryros = new List<GameObject>();
     GameObject temp;
-    int speed = 1000;
-    int numOfGry = 20;
+    int speed = 0;
+    int limitGry = 20;
+    int numOfGry = 1;
+    int speedUp = 0;
+    int i = 0;
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(gryro);
-        for (int i = 0; i < numOfGry; i++)
+        for (int i = 0; i < limitGry; i++)
         {
             temp = Instantiate(gryro);
             gryros.Add(temp);
@@ -26,20 +28,31 @@ public class GryroSpawnBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(i == numOfGry)
+        {
+            i = 0;
+        }
         speed--;
         if(speed < 0 && numOfGry > 0)
         {
-            for(int i = 0; i < numOfGry; i++)
+            for(int j = 0; j < numOfGry; j++)
             {
-                if(!gryros[i].activeInHierarchy)
+                if(!gryros[j].activeInHierarchy && j == i)
                 {
-                    gryros[i].SetActive(true);
+                    gryros[j].SetActive(true);
+                    i++;
                     break;
                 }
             }
-            speed = 500;
-            
+            if(numOfGry < limitGry)
+            {
+                numOfGry++;
+            }
+            speed = 1000 - speedUp;
+            if (speedUp < 500)
+                speedUp++;
         }
+        
         
     }
     

@@ -9,6 +9,8 @@ public class Soldier : MonoBehaviour
     bool onGround = false;
     public Animator anim;
     public float speed;
+    private float increSpeedTime = 10;
+    bool isDestroyed;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,19 +37,33 @@ public class Soldier : MonoBehaviour
             }
 
         }
+        increSpeedTime -= Time.deltaTime;
+        if(increSpeedTime < 0)
+        {
+            increSpeedTime = 10;
+            speed++;
+        }
+        if(isDestroyed)
+        {
+            GameManager.instance.addPoint();
+            isDestroyed = false;
+            Destroy(gameObject);
+
+        }
     }
 
     private void FixedUpdate()
     {
         if(!onGround)
-            rb.AddForce(-transform.up);
+            rb.AddForce(-transform.up * speed);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Firer")
         {
-            Destroy(gameObject);
+            isDestroyed = true;
+
         }
         if(collision.tag == "something")
         {

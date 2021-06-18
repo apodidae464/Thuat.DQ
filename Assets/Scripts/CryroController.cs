@@ -18,24 +18,30 @@ public class CryroController : MonoBehaviour
 
     public float moveSpeed;
     public bool goToLeft;
-    private float solderDelay = 500;
+    private float solderDelay = 800;
+    private float spawnSpeed = 0;
     private int numOfSolider = 0;
+    private int limitSoldier = 3;
     float timeLife = 1000;
-
-    private bool isDestroy = false;
+    Vector3 destroyedPos;
+    GameObject clone;
+    bool canAddPoint;
+    
+    bool isDestroy = false;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         gameObject.SetActive(false);
-        gryFrag.SetActive(false);
         SpawnPos();
+        canAddPoint = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if(!goToLeft)
         {
             rb.velocity = new Vector2(moveSpeed, 0);
@@ -46,7 +52,7 @@ public class CryroController : MonoBehaviour
         }
 
         solderDelay--;
-        if (!isDestroy && solderDelay < 0 && numOfSolider < 3 && transform.position.x > leftSpawPoint && transform.position.x < RightSpawPoint)
+        if (!isDestroy && solderDelay < 0 && numOfSolider < limitSoldier && transform.position.x > leftSpawPoint && transform.position.x < RightSpawPoint)
         {
             if (transform.position.x > root.transform.position.x)
             {
@@ -58,76 +64,90 @@ public class CryroController : MonoBehaviour
                 soldier.transform.localScale = new Vector3(1, 1, 1);
                 Instantiate(soldier, transform.position, Quaternion.identity);
             }
-            solderDelay = 500;
+            solderDelay = 800 - spawnSpeed;
             numOfSolider++;
         }
 
-        if(isDestroy)
+        if (canAddPoint)
+        {
+            GameManager.instance.addPoint();
+            canAddPoint = false;
+        }
+        if (isDestroy)
         {
             timeLife--;
             if(timeLife < 0)
             {
-                if(gameObject.activeInHierarchy)
+                if (gameObject.activeInHierarchy)
                 {
+                    DestroyFrag();
                     gameObject.SetActive(false);
-                    timeLife = 1000;
+                    resetObj();
                 }
             }
         }
     }
 
+    void resetObj()
+    {
+        moveSpeed++;
+        limitSoldier++;
+        if (spawnSpeed < 500)
+        {
+            spawnSpeed++;
+        }
+        isDestroy = false;
+        SpawnPos();
+        timeLife = 1000;
+        numOfSolider = 0;
+        moveSpeed++;
+    }
 
     
     public void SpawnPos()
     {
         int r = Random.Range(2, 5);
         int lr = Random.Range(0, 2);
-        int z = Random.Range(0, 1);
         if(lr == 0)
         {
-            float left = Random.Range(-12, -10);
-            gameObject.transform.position = new Vector3(left, r, z);
+            gameObject.transform.position = new Vector3(-10, r, 0);
             rb.transform.localScale = new Vector3(1, 1, 1);
             goToLeft = false;
         }
         else
         {
-            float right = Random.Range(10, 12);
-            gameObject.transform.position = new Vector3(right, r, z);
+            gameObject.transform.position = new Vector3(10, r, 0);
             rb.transform.localScale = new Vector3(-1, 1, 1);
             goToLeft = true;
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    void DestroyFrag()
     {
-        if (collision.tag == "GryroSpawnBox")
-        {
-            if(gameObject.activeInHierarchy)
-            {
-                gameObject.SetActive(false);
-                SpawnPos();
-            }
-        }
-        
+        Destroy(clone);
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Firer")
         {
             anim.SetBool("destroyed", true);
-            isDestroy = true;
+            destroyedPos = new Vector3(transform.position.x, transform.position.y,transform.position.z);
+        }
+        if (collision.tag == "horizon")
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                resetObj();
+            }
         }
     }
 
     public void onGryroDestroyed()
     {
-       
-        if (!gryFrag.activeInHierarchy)
-        {
-            gryFrag.SetActive(true);
-        }
-        
+        clone = Instantiate(gryFrag, destroyedPos, Quaternion.identity);
+        clone.SetActive(true);
+        isDestroy = true;
+        canAddPoint = true;
     }
 }

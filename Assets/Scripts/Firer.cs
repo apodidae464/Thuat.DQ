@@ -25,14 +25,14 @@ public class Firer : MonoBehaviour
     }
     void FixedUpdate()
     {
-        firerRb.AddForce(transform.up * speed * 500 * Time.deltaTime);
+        firerRb.AddForce(transform.up * speed * 200 * Time.deltaTime);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "FirerBox" || collision.tag == "Soldier" || collision.tag == "Gryro")
+        if(collision.tag == "border" || /*collision.tag == "Soldier" ||*/ collision.tag == "Gryro")
         {
-            Destroy(gameObject, par.main.duration);
+            Destroy(gameObject);
         }
     }
 }

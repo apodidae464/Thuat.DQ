@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2599731614932350130}
   - component: {fileID: 2599731614932350129}
   - component: {fileID: 2599731614932350128}
+  - component: {fileID: 371532330}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -96,9 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de51dcbdad1f9be48ac567979d81e46a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 371532330}
   gun: {fileID: 2599731615305328171}
   firer: {fileID: 4963638272859021803, guid: 468e70c5ce69c4141bd5cb555a256b5c, type: 3}
   ciu: {fileID: 2599731615242365239}
+  box: {fileID: 0}
+  cat: {fileID: 0}
   speed: 1
 --- !u!58 &2599731614932350128
 CircleCollider2D:
@@ -116,6 +120,25 @@ CircleCollider2D:
   m_Offset: {x: -0.01, y: -0.04}
   serializedVersion: 2
   m_Radius: 0.55747694
+--- !u!95 &371532330
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2599731614932350135}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa237ad12047f01408365c7f8dda1829, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2599731615242365239
 GameObject:
   m_ObjectHideFlags: 0

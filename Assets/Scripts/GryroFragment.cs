@@ -15,10 +15,11 @@ public class GryroFragment : MonoBehaviour
     void Start()
     {
         time = Random.Range(100, 500);
+        
     }
 
-    // Update is called once per frame
-    void Update()
+        // Update is called once per frame
+        void Update()
     {
         if(!isForce)
         {
