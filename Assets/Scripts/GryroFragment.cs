@@ -10,18 +10,28 @@ public class GryroFragment : MonoBehaviour
     Vector2 direct;
     Vector2 perpen;
     bool isForce = false;
-    int time;
+    float time;
+    float timeLife;
     // Start is called before the first frame update
     void Start()
     {
-        time = Random.Range(100, 500);
-        
+        time = Random.Range(1, 3);
+        timeLife = 4;
     }
 
         // Update is called once per frame
         void Update()
     {
-        if(!isForce)
+        
+        for (int i = 0; i < gryroFrag.Length; i++)
+        {
+            if(gryroFrag[i].transform.position.y < root.transform.position.y)
+            {
+                gryroFrag[i].GetComponent<Collider2D>().isTrigger = false;
+            }
+        }
+        
+        if (!isForce)
         {
             direct.x = target.transform.position.x - root.transform.position.x;
             direct.y = target.transform.position.y - root.transform.position.y;
@@ -39,15 +49,19 @@ public class GryroFragment : MonoBehaviour
                 {
                     gryroFrag[i].GetComponent<Rigidbody2D>().AddForce(-perpen * r);
                 }
-                time--;
+                time -= Time.deltaTime;
                 if(time < 0)
                     isForce = true;
             }
         
         }
-        
-        
+        timeLife -= Time.deltaTime;
+        if(timeLife < 0)
+        {
+            Destroy(gameObject);
+        }
+
+
     }
-    
 
 }

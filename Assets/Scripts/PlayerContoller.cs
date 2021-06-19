@@ -13,7 +13,7 @@ public class PlayerContoller : MonoBehaviour
     public float speed;
     public static PlayerContoller instance;
     private float fireRate;
-    private bool isDead;
+    public bool isDead;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,9 +54,12 @@ public class PlayerContoller : MonoBehaviour
             if (fireRate < 0)
             {
                 Instantiate(firer, ciu.transform.position, ciu.transform.rotation);
+                AudioMgr.instance.playSfx(AudioMgr.MUSIC.FIRE);
                 fireRate = 0.25f;
             }
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -67,6 +70,7 @@ public class PlayerContoller : MonoBehaviour
             ciu.SetActive(false);
             box.SetActive(true);
             anim.SetBool("catdead", true);
+            AudioMgr.instance.playSfx(AudioMgr.MUSIC.PLAYER_DEAD);
         }
     }
 

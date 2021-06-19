@@ -18,24 +18,23 @@ public class CryroController : MonoBehaviour
 
     public float moveSpeed;
     public bool goToLeft;
-    private float solderDelay = 800;
-    private float spawnSpeed = 0;
+    private float solderDelay = 8;
+    private float spawnSpeed;
+    private float spawnTime = 0;
     private int numOfSolider = 0;
     private int limitSoldier = 3;
-    float timeLife = 1000;
     Vector3 destroyedPos;
     GameObject clone;
-    bool canAddPoint;
     
     bool isDestroy = false;
     // Start is called before the first frame update
     void Start()
     {
+        spawnSpeed = Random.Range(0,8);
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         gameObject.SetActive(false);
         SpawnPos();
-        canAddPoint = false;
     }
 
     // Update is called once per frame
@@ -50,9 +49,9 @@ public class CryroController : MonoBehaviour
         {
             rb.velocity = new Vector2(-moveSpeed, 0);
         }
+        spawnSpeed -= Time.deltaTime;
 
-        solderDelay--;
-        if (!isDestroy && solderDelay < 0 && numOfSolider < limitSoldier && transform.position.x > leftSpawPoint && transform.position.x < RightSpawPoint)
+        if (!isDestroy && spawnSpeed < 0 && numOfSolider < limitSoldier && transform.position.x > leftSpawPoint && transform.position.x < RightSpawPoint && !PlayerContoller.instance.isDead)
         {
             if (transform.position.x > root.transform.position.x)
             {
@@ -64,43 +63,40 @@ public class CryroController : MonoBehaviour
                 soldier.transform.localScale = new Vector3(1, 1, 1);
                 Instantiate(soldier, transform.position, Quaternion.identity);
             }
-            solderDelay = 800 - spawnSpeed;
             numOfSolider++;
-        }
-
-        if (canAddPoint)
-        {
-            GameManager.instance.addPoint();
-            canAddPoint = false;
-        }
-        if (isDestroy)
-        {
-            timeLife--;
-            if(timeLife < 0)
+            if(spawnTime < spawnSpeed - 2)
             {
-                if (gameObject.activeInHierarchy)
-                {
-                    DestroyFrag();
-                    gameObject.SetActive(false);
-                    resetObj();
-                }
+                spawnTime++;
+            }
+            spawnSpeed = solderDelay;
+            spawnSpeed -= spawnTime;
+            if (spawnSpeed < 3)
+            {
+                spawnSpeed = 3;
             }
         }
+
+       
+        
     }
 
     void resetObj()
     {
-        moveSpeed++;
-        limitSoldier++;
-        if (spawnSpeed < 500)
+        if(moveSpeed < 5)
+            moveSpeed++;
+        if(moveSpeed == 4)
         {
-            spawnSpeed++;
+            moveSpeed = 1;
+        }
+        if(limitSoldier < 5)
+            limitSoldier++;
+        if (solderDelay > 3)
+        {
+            solderDelay--;
         }
         isDestroy = false;
         SpawnPos();
-        timeLife = 1000;
         numOfSolider = 0;
-        moveSpeed++;
     }
 
     
@@ -122,10 +118,7 @@ public class CryroController : MonoBehaviour
         }
     }
 
-    void DestroyFrag()
-    {
-        Destroy(clone);
-    }
+    
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -145,9 +138,14 @@ public class CryroController : MonoBehaviour
 
     public void onGryroDestroyed()
     {
+        AudioMgr.instance.playSfx(AudioMgr.MUSIC.GRYRO_BROKEN);
+
         clone = Instantiate(gryFrag, destroyedPos, Quaternion.identity);
         clone.SetActive(true);
+        GameManager.instance.addPoint();
+        gameObject.SetActive(false);
         isDestroy = true;
-        canAddPoint = true;
+        resetObj();
     }
+
 }

@@ -10,7 +10,7 @@ public class GryroSpawnBox : MonoBehaviour
     public int numOfGryPerFrame;
     public List<GameObject> gryros = new List<GameObject>();
     GameObject temp;
-    int speed = 0;
+    float speed = 0;
     int limitGry = 20;
     int numOfGry = 1;
     int speedUp = 0;
@@ -18,6 +18,8 @@ public class GryroSpawnBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AudioMgr.instance.pauseBMG2();
+        
         for (int i = 0; i < limitGry; i++)
         {
             temp = Instantiate(gryro);
@@ -32,7 +34,7 @@ public class GryroSpawnBox : MonoBehaviour
         {
             i = 0;
         }
-        speed--;
+        speed -= Time.deltaTime;
         if(speed < 0 && numOfGry > 0)
         {
             for(int j = 0; j < numOfGry; j++)
@@ -48,8 +50,8 @@ public class GryroSpawnBox : MonoBehaviour
             {
                 numOfGry++;
             }
-            speed = 1000 - speedUp;
-            if (speedUp < 500)
+            speed = 5 - speedUp;
+            if (speedUp < 4)
                 speedUp++;
         }
         

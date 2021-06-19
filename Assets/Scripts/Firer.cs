@@ -30,9 +30,14 @@ public class Firer : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "border" || /*collision.tag == "Soldier" ||*/ collision.tag == "Gryro")
+        if(collision.tag == "border")
         {
             Destroy(gameObject);
+        }
+        if (collision.tag == "Gryro")
+        {
+            if(collision.gameObject.activeInHierarchy)
+                Destroy(gameObject);
         }
     }
 }

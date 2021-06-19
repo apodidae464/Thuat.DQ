@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public Text score;
     int point = 0;
     int highestPoint = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
         topPoint.text = "Top point: " + highestPoint;
         endGameMenu.SetActive(false);
         point = 0;
+        AudioMgr.instance.PlayBMG2();
+
         if (instance == null)
             instance = this;
     }
@@ -30,22 +33,40 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         text.text = "" + point;
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Quit();
+        }
     }
 
     public void StartGame()
     {
+        AudioMgr.instance.playSfx(AudioMgr.MUSIC.BUTTON_CLICK);
         SceneManager.LoadScene(sceneName);
+        AudioMgr.instance.PlayBMG();
     }
+
 
     public void Restart()
     {
-        if(point > highestPoint)
+        AudioMgr.instance.playSfx(AudioMgr.MUSIC.BUTTON_CLICK);
+
+        if (point > highestPoint)
         {
             PlayerPrefs.SetInt("Hightest_point", point);
         }
         SceneManager.LoadScene(sceneName);
+        AudioMgr.instance.PlayBMG();
     }
 
+    public void Quit()
+    {
+        if (point > highestPoint)
+        {
+            PlayerPrefs.SetInt("Hightest_point", point);
+        }
+        Application.Quit();
+    }
     public void OpenRestartMenu()
     {
         score.text = "" + point;

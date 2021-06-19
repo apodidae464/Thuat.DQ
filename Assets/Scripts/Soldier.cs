@@ -63,7 +63,10 @@ public class Soldier : MonoBehaviour
         if(collision.tag == "Firer")
         {
             isDestroyed = true;
-
+            int r = Random.Range(0, 2);
+            if (r == 1)
+                AudioMgr.instance.playSfx(AudioMgr.MUSIC.OH_NO);
+            AudioMgr.instance.playSfx(AudioMgr.MUSIC.SOLDIER_HURT);
         }
         if(collision.tag == "something")
         {
