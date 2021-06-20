@@ -23,13 +23,13 @@ public class GryroFragment : MonoBehaviour
         void Update()
     {
         
-        for (int i = 0; i < gryroFrag.Length; i++)
-        {
-            if(gryroFrag[i].transform.position.y < root.transform.position.y)
-            {
-                gryroFrag[i].GetComponent<Collider2D>().isTrigger = false;
-            }
-        }
+        //for (int i = 0; i < gryroFrag.Length; i++)
+        //{
+        //    if(gryroFrag[i].transform.position.y < root.transform.position.y)
+        //    {
+        //        gryroFrag[i].GetComponent<Collider2D>().isTrigger = false;
+        //    }
+        //}
         
         if (!isForce)
         {
